@@ -1,0 +1,17 @@
+#conteneur-de-jeux {
+    top: 30px;
+    font-size: 0;
+    margin: auto;
+    height: 760px;
+    width: 760px;
+    padding: 0;
+    border: none;
+    overflow: hidden;
+
+}
+
+.grid {
+    border: none;
+    outline: 1px solid #000;
+    display: inline-block;
+}
