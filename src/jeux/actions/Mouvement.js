@@ -84,14 +84,21 @@ class Mouvement {
     }
 
     nouvelITineraire(plateau, ligne, colonne, remplacement) {
+        //A l'initialisation du plateau
         if (plateau.surface[ligne][colonne].aUneArme !== true) {
             plateau.surface[ligne][colonne].peutSeDeplacer = true;
-            $(`#grid_${ligne}_${colonne}`).css("background", "rgb(160, 180, 60)");
-        } else if (remplacement) {
-            $(`#grid_${ligne}_${colonne}`).css("box-shadow", "");
+            $(`#grid_${ligne}_${colonne}`).addClass('accessible');
+        }
+        //Sinon si on veut remplacer une arme par une autre
+        else if (remplacement) {
+            $(`#grid_${ligne}_${colonne}`).removeClass('ombre-arme');
             plateau.surface[ligne][colonne].peutSeDeplacer = true;
         }else {
-            $(`#grid_${ligne}_${colonne}`).css("box-shadow", "inset 0 0 0 2000px rgba(243, 255, 67, 0.1)");
+            if(!$(`#grid_${ligne}_${colonne}`).hasClass('ombre-arme')){
+                $(`#grid_${ligne}_${colonne}`).addClass('ombre-arme');
+            }else {
+                $(`#grid_${ligne}_${colonne}`).removeClass('ombre-arme');
+            }
             plateau.surface[ligne][colonne].peutSeDeplacer = true;
         }
     }
@@ -233,10 +240,10 @@ class Mouvement {
         ) {
             //If there's no weapon i highlight the box
             plateau.surface[ligne][colonne].peutSeDeplacer = false;
-            $(`#grid_${ligne}_${colonne}`).css("background", "");
+            $(`#grid_${ligne}_${colonne}`).removeClass('accessible');
         }else {
             plateau.surface[ligne][colonne].peutSeDeplacer = false;
-            $(`#grid_${ligne}_${colonne}`).css("background", "");
+            $(`#grid_${ligne}_${colonne}`).removeClass('accessible');
         }
     }
     /**

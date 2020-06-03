@@ -85,12 +85,13 @@ class Plateau {
      * @param {String} image l'image de l'obstacle
      */
     setImage(ligne, colonne, image) {
-        $(document).find(`#grid_${ligne}_${colonne}`).css({
+        $(`#grid_${ligne}_${colonne}`).css({
             "background": `url('${image}') no-repeat`,
             "background-size": "contain",
             "width": `${760 / this.nb_grille}px`,
             "height": `${760 / this.nb_grille}px`
         });
+        $(`#grid_${ligne}_${colonne}`).removeClass('ombre-arme');
     }
 
     /**
