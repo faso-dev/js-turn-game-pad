@@ -8,18 +8,26 @@ class Personnage {
     nom;
     force;
     image;
+    force_de_frappe;
     /**
      *
      * @param {Number} id
      * @param {String} nom
      * @param {Number} force
      * @param {String} image
+     * @param {Number} force_de_frappe
      */
-    constructor(id, nom, force, image) {
+    constructor(id, nom, force, image, force_de_frappe = 10) {
         this.id = id;
         this.nom = nom;
         this.force = force;
         this.image = image;
+        this.force_de_frappe = force_de_frappe;
+        this.position = {
+            x: null,
+            y: null
+        }
+        this.arme = null
     }
 
     /**
@@ -54,15 +62,38 @@ class Personnage {
         return this.image;
     }
 
+    get force_de_frappe() {
+        return this.force_de_frappe;
+    }
+
+    /**
+     * Met à jour la force du joueur
+     * @param {Number} value
+     */
+    set force_de_frappe(value) {
+        this.force_de_frappe = value;
+    }
+
     /**
      * Met à jour la force du joueur en lui affligeant le dégât
      * @param {Number} degat le dégât à affliger au joueur
      */
-    miseAjourDeLaForce(degat){
+    miseAJourDeLaForce(degat){
         if (degat >= this.force){
             this.force = 0
         }else {
             this.force -= degat
         }
     }
+
+    /**
+     * Met à jour la position du joueur sur la carte
+     * @param {Number} ligne
+     * @param {Number} colonne
+     */
+    miseAJourDeLaPosition(ligne, colonne){
+        this.position.x = ligne
+        this.position.y = colonne
+    }
+
 }

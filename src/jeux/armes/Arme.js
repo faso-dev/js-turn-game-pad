@@ -21,6 +21,10 @@ class Arme {
         this.nom = nom;
         this.degat = degat;
         this.image = image;
+        this.position = {
+            x: null,
+            y: null
+        };
     }
 
     /**
@@ -53,5 +57,15 @@ class Arme {
      */
     get image(){
         return this.image
+    }
+
+    /**
+     * Les nouvelles cordonnées de l'arme sur le plateau
+     * @param {Number} ligne la cordonnée en x(la ligne)
+     * @param {Number} colonne la cordonnee en y(la colonne)
+     */
+    miseAJourDeLaPosition(ligne, colonne){
+        this.position.x = ligne
+        this.position.y = colonne
     }
 }
