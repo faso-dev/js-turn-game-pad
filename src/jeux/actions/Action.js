@@ -3,20 +3,20 @@
  */
 class Action {
 
-    constructor() {
-    }
-
     /**
      * Permet au joueur d'attaquer
+     * @param {Personnage} source
+     * @param {Personnage} cible
      */
-    attaquer(){
+    attaquer(source, cible){
 
     }
 
     /**
      * Permet au joueur de se défendre
+     * @param {Personnage} joueur
      */
-    defendre(){
+    defendre(joueur){
 
     }
 }

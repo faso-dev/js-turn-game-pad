@@ -32,9 +32,10 @@ class GameElement extends HTMLElement{
         plateau.placerUnObstacle()
         plateau.placerLesArmes()
         plateau.placerLesJoueurs()
-        let mouvement = new Mouvement();
+        let mouvement = new Mouvement(),
+            action = new Action();
         mouvement.activerLesZonesAccessibleAuxJoueurs(plateau)
-        this.ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement)
+        this.ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement, action)
 
     }
 
@@ -42,8 +43,9 @@ class GameElement extends HTMLElement{
      *
      * @param {Plateau} plateau
      * @param {Mouvement} mouvement
+     * @param {Action} action
      */
-    ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement){
+    ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement, action){
         $(document).on('click', '.grid', e => {
             let ligne = Number(e.target.dataset.ligne),
                 colonne = Number(e.target.dataset.colonne),
@@ -75,7 +77,12 @@ class GameElement extends HTMLElement{
                 plateau.joueur_actuel = plateau.joueurs[joueurSuivantIndex]
 
                 mouvement.activerLesZonesAccessibleAuxJoueurs(plateau, remplacementArme)
-
+                let combat = plateau.estCeEnPostionDeCombat(ligne, colonne)
+                if (combat){
+                    //TODO: initialisation du combat
+                    $('#conteneur-de-jeux').parentNode.replaceWith(new FightElement())
+                    alert('Position combat')
+                }
                 remplacementArme = false
 
 

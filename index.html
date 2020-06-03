@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <title>Mon jeux de plateau</title>
@@ -7,11 +7,80 @@
     <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 <body>
-<div class="container">
-    <h1 class="text-center text-info">
-        Bienvenu sur mon super jeu de plateau
-    </h1>
-    <jeux-de-tour/>
+<div class="container-fluid">
+    <div class="pb-5">
+        <div class="row justify-content-center">
+            <div id="joueur-un" class="col-lg-2 pr-2">
+                <h1 class="joueur-nom"></h1>
+                <p class="joueur-image"></p>
+                <div>
+                    <div class="card elevation-4">
+                        <div class="card-header">
+                            <h4>Outil de combat</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="joueur-arme-image"></p>
+                            <p>
+                                <strong>Arme : </strong><span class="joueur-arme-nom">Néant</span>
+                            </p>
+                            <p>
+                                <strong>Dégâts de l'arme : </strong> <span class="joueur-arme-degat">Néant</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card mt-3 elevation-4">
+                        <div class="card-header">
+                            <h4>Puissance de combat</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>Force : </strong> <span class="joueur-force"></span>
+                            </p>
+                            <p>
+                                <strong>Force de frappe : </strong> <span class="joueur-force-frappe"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <jeux-de-tour/>
+            </div>
+            <div id="joueur-deux" class="col-lg-2 pl-2">
+                <h1 class="joueur-nom"></h1>
+                <p class="joueur-image"></p>
+                <div>
+                    <div class="card elevation-4">
+                        <div class="card-header">
+                            <h4>Outil de combat</h4>
+                        </div>
+                        <div class="card-body">
+                            <p class="joueur-arme-image"></p>
+                            <p>
+                                <strong>Arme : </strong><span class="joueur-arme-nom">Néant</span>
+                            </p>
+                            <p>
+                                <strong>Dégâts de l'arme : </strong> <span class="joueur-arme-degat">Néant</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="card mt-3 elevation-4">
+                        <div class="card-header">
+                            <h4>Puissance de combat</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>Force : </strong> <span class="joueur-force"></span>
+                            </p>
+                            <p>
+                                <strong>Force de frappe : </strong> <span class="joueur-force-frappe"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -21,6 +90,8 @@
 <script src="./src/helpers/generator.js"></script>
 <script src="./src/jeux/plateau/Plateau.js"></script>
 <script src="./src/jeux/actions/Mouvement.js"></script>
+<script src="./src/jeux/actions/Action.js"></script>
+<script src="./src/html/custom/FightElement.js"></script>
 <script src="./src/html/custom/GameElement.js"></script>
 <script src="./src/jeux/main.js"></script>
 </body>

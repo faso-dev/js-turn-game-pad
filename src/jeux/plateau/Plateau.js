@@ -46,6 +46,33 @@ class Plateau {
         this.joueur_actuel = this.joueurs[Math.floor(Math.random() * this.joueurs.length)];
         $(".grid").width(760 / this.nb_grille);
         $(".grid").height(760 / this.nb_grille);
+        this.informationsInitialsJoueurs();
+    }
+
+
+    informationsInitialsJoueurs() {
+        $('#joueur-un .joueur-nom').text(this.joueur_actuel.nom)
+        $('#joueur-un .joueur-image').css({
+            'background': `url('${this.joueur_actuel.image}') no-repeat`,
+            "background-size": "contain",
+            "width": `${280}px`,
+            "height": `${280}px`
+        })
+        $('#joueur-un').addClass(`data-${this.joueur_actuel.id}`)
+        $('#joueur-un .joueur-force').text(this.joueur_actuel.force)
+        $('#joueur-un .joueur-force-frappe').text(this.joueur_actuel.force_de_frappe)
+
+        let nexJoueur = this.joueurs.find(j => j.id !== this.joueur_actuel.id)
+        $('#joueur-deux .joueur-nom').text(nexJoueur.nom)
+        $('#joueur-deux .joueur-image').css({
+            'background': `url('${nexJoueur.image}') no-repeat`,
+            "background-size": "contain",
+            "width": `${280}px`,
+            "height": `${280}px`
+        })
+        $('#joueur-deux').addClass(`data-${nexJoueur.id}`)
+        $('#joueur-deux .joueur-force').text(nexJoueur.force)
+        $('#joueur-deux .joueur-force-frappe').text(nexJoueur.force_de_frappe)
     }
 
     /**
@@ -98,16 +125,21 @@ class Plateau {
      * Attribue une nouvelle arme un joueur
      * @param {Number} ligne
      * @param {Number} colonne
-     * @param {Object} joueur
+     * @param {Personnage} joueur
      * @param {Arme} arme
      */
     prendreUneArme(ligne, colonne, joueur, arme) {
-        this.joueur_actuel.arme = arme
+        joueur.force_de_frappe = arme.degat
+        joueur.arme = arme
+        this.joueur_actuel = joueur
         let index = this.joueurs.findIndex(j => j.id === joueur.id)
+        this.miseAJourDonneesJoueur(joueur)
         if (-1 !== index) {
             this.joueurs[index] = joueur
         }
     }
+
+
 
     /**
      * Efface l'arme courante de la grille
@@ -134,23 +166,19 @@ class Plateau {
     }
 
     /**
-     *
-     * @param {Number} ligne
-     * @param {Number} colonne
+     * Met à jour les données du joueur, notamment les détails de son arme
      * @param {Personnage} joueur
      */
-    miseAJourDesDonnesDuJoueur(ligne, colonne, joueur) {
-        for (let arme in this.armes) {
-            if (arme === this.surface[ligne][colonne].arme) {
-                this.joueurs.map(j => {
-                    if (j === joueur) {
-                        j.force_de_frappe = arme.degat
-                    }
-                })
-                this.miseAJourDeLInterfaceDUnJoueur(joueur, arme)
-                break;
-            }
-        }
+    miseAJourDonneesJoueur(joueur) {
+        $(`.data-${joueur.id} .joueur-arme-nom`).text(joueur.arme.nom)
+        $(`.data-${joueur.id} .joueur-arme-degat`).text(joueur.arme.degat)
+        $(`.data-${joueur.id} .joueur-arme-image`).css({
+            'background': `url('${joueur.arme.image}') no-repeat`,
+            "background-size": "contain",
+            "width": `${150}px`,
+            "height": `${150}px`
+        })
+        $(`.data-${joueur.id} .joueur-force-frappe`).text(joueur.force_de_frappe)
     }
 
     /**
@@ -338,5 +366,19 @@ class Plateau {
         this.armes[index].miseAJourDeLaPosition(ligne, colonne)
         //On met à jour l'image de l'arme
         this.setImage(ligne, colonne, arme.image);
+    }
+
+    /**
+     * Détermine si nous sommes phase de combat
+     * @param {Number} ligne
+     * @param {Number} colonne
+     * @returns {boolean|boolean}
+     */
+    estCeEnPostionDeCombat(ligne, colonne){
+        return (ligne < this.nb_grille -1 && this.surface[ligne + 1][colonne].existUnJoueur === true) ||
+            (ligne > 0 && ligne < this.nb_grille -1 && this.surface[ligne - 1][colonne].existUnJoueur === true) ||
+            (colonne < this.nb_grille -1 && this.surface[ligne - 1][colonne].existUnJoueur === true) ||
+            (colonne > this.nb_grille -1 && this.surface[ligne - 1][colonne].existUnJoueur === true)
+
     }
 }

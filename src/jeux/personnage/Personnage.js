@@ -9,6 +9,7 @@ class Personnage {
     force;
     image;
     force_de_frappe;
+    estEnDefence;
     /**
      *
      * @param {Number} id
@@ -28,6 +29,19 @@ class Personnage {
             y: null
         }
         this.arme = null
+        this.estEnDefence = null
+    }
+
+    /**
+     *
+     * @param {Boolean} etat
+     */
+    set estEnDefence(etat) {
+        this.estEnDefence = etat
+    }
+
+    get estEnDefence(){
+        return this.estEnDefence
     }
 
     /**
