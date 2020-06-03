@@ -59,30 +59,24 @@ class GameElement extends HTMLElement{
                 // n'a pas encore d'arme
                 //On la lui attribue
                 if (plateau.surface[ligne][colonne].aUneArme && null === joueurActuel.arme) {
-                    plateau.joueur_actuel.arme = plateau.surface[ligne][colonne].arme
-                    let index = plateau.joueurs.findIndex(j => j.id === joueurActuel.id)
-                    if(-1 !== index){
-                        plateau.joueurs[index] = joueurActuel
-                    }
-                    plateau.placer(ARME,null , null, null, ligne, colonne);
+                    //Le joueur prend l'arme actuelle
+                    plateau.prendreUneArme(ligne, colonne, joueurActuel, plateau.surface[ligne][colonne].arme)
+                    //On supprime l'arme actuelle de la grille
+                    plateau.supprimerArmeDeLaGrille(ligne, colonne);
                 } else if (plateau.surface[ligne][colonne].aUneArme && joueurActuel.arme) {
-                    let ancienneArme = joueurActuel.arme
-                    plateau.joueur_actuel.arme = plateau.surface[ligne][colonne].arme;
-                    let index = plateau.joueurs.findIndex(j => j.id === joueurActuel.id)
-                    if(-1 !== index){
-                        plateau.joueurs[index] = joueurActuel
-                    }
-                    plateau.placer(ARME, ancienneArme.image, ancienneArme, null, ligne, colonne, true);
-
+                    let ancienneArme = joueurActuel.arme,
+                        nouvelleArme = plateau.surface[ligne][colonne].arme;
+                    //Le joueur change son arme actuelle
+                    plateau.changerArme(ligne, colonne, joueurActuel, ancienneArme, nouvelleArme)
                     remplacementArme = true
                 }
-                plateau.placer(JOUEUR,joueurActuel.image,null,joueurActuel, ligne, colonne);
+                plateau.placerJoueur(joueurActuel,false, ligne, colonne);
                 let joueurSuivantIndex = plateau.joueurs.findIndex( j => j.id !== joueurActuel.id)
                 plateau.joueur_actuel = plateau.joueurs[joueurSuivantIndex]
-                console.log(remplacementArme)
+
                 mouvement.activerLesZonesAccessibleAuxJoueurs(plateau, remplacementArme)
-                if (remplacementArme)
-                    remplacementArme = false
+
+                remplacementArme = false
 
 
             }

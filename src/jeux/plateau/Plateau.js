@@ -38,7 +38,7 @@ class Plateau {
                         image: null,
                         degat: null
                     },
-                    aUneArme : null,
+                    aUneArme: null,
                     peutSeDeplacer: null
                 }
             }
@@ -56,7 +56,7 @@ class Plateau {
     placerUnObstacle(nb_obstacle = 6, obstacle_image = './assets/images/obstacles/obstacle.png') {
         for (let i = 0; i < nb_obstacle; i++) {
             //On place l'obstacle sur le plateau
-            this.placer(BLOCK,obstacle_image,)
+            this.placerObstacle(obstacle_image,)
         }
     }
 
@@ -65,7 +65,7 @@ class Plateau {
      */
     placerLesArmes() {
         this.armes.forEach(arme => {
-            this.placer(ARME,arme.image, arme)
+            this.placerArme(null, null, arme, true)
         })
     }
 
@@ -74,15 +74,15 @@ class Plateau {
      */
     placerLesJoueurs() {
         this.joueurs.forEach(joueur => {
-            this.placer(JOUEUR, joueur.image,null,joueur)
+            this.placerJoueur(joueur, true)
         })
     }
 
     /**
-     * Ajoute le css permettant de définir les images des obstacles
-     * @param {Number} ligne la ligne sur laquelle afficher l'obstacle
-     * @param {Number} colonne la colonne sur laquelle afficher l'obstacle
-     * @param {String} image l'image de l'obstacle
+     * Ajoute une image background à la case {ligne, colonne}
+     * @param {Number} ligne la ligne sur la grille
+     * @param {Number} colonne la colonne sur la grille
+     * @param {String} image l'url de l'image à mettre en background
      */
     setImage(ligne, colonne, image) {
         $(`#grid_${ligne}_${colonne}`).css({
@@ -95,17 +95,42 @@ class Plateau {
     }
 
     /**
-     * Permet de mettre à jour la position du joueur lorsqu'il prend une arme
+     * Attribue une nouvelle arme un joueur
      * @param {Number} ligne
      * @param {Number} colonne
      * @param {Object} joueur
+     * @param {Arme} arme
      */
-    prendreUneArme(ligne, colonne, joueur){
-        if (this.surface[ligne][colonne].arme) {
-            this.surface[ligne][colonne].existUnJoueur = true;
-            this.surface[ligne][colonne].joueur = joueur;
-            this.miseAJourJoueurPosition(joueur,ligne,colonne)
+    prendreUneArme(ligne, colonne, joueur, arme) {
+        this.joueur_actuel.arme = arme
+        let index = this.joueurs.findIndex(j => j.id === joueur.id)
+        if (-1 !== index) {
+            this.joueurs[index] = joueur
         }
+    }
+
+    /**
+     * Efface l'arme courante de la grille
+     * @param {Number} ligne
+     * @param {Number} colonne
+     */
+    supprimerArmeDeLaGrille(ligne, colonne) {
+        this.surface[ligne][colonne].arme = null;
+        this.surface[ligne][colonne].element = null;
+        this.surface[ligne][colonne].aUneArme = null;
+    }
+
+    /**
+     *
+     * @param {Number} ligne la ligne sur la grille
+     * @param {Number} colonne la colonne sur la grille
+     * @param {Personnage} joueur le joueur actuel
+     * @param {Arme} ancienneArme l'ancienne arme du joueur
+     * @param {Arme} nouvelleArme la nouvelle arme du joueur
+     */
+    changerArme(ligne, colonne, joueur, ancienneArme, nouvelleArme) {
+        this.prendreUneArme(ligne, colonne, joueur, nouvelleArme)
+        this.placerArme(ligne, colonne, ancienneArme);
     }
 
     /**
@@ -114,11 +139,11 @@ class Plateau {
      * @param {Number} colonne
      * @param {Personnage} joueur
      */
-    miseAJourDesDonnesDuJoueur(ligne, colonne, joueur){
+    miseAJourDesDonnesDuJoueur(ligne, colonne, joueur) {
         for (let arme in this.armes) {
             if (arme === this.surface[ligne][colonne].arme) {
-                this.joueurs.map( j => {
-                    if (j === joueur){
+                this.joueurs.map(j => {
+                    if (j === joueur) {
                         j.force_de_frappe = arme.degat
                     }
                 })
@@ -133,7 +158,7 @@ class Plateau {
      * @param {Personnage} joueur le joueur à mettre les infos sur le graphique
      * @param {Arme} arme la nouvelle arme
      */
-    miseAJourDeLInterfaceDUnJoueur(joueur, arme){
+    miseAJourDeLInterfaceDUnJoueur(joueur, arme) {
         this.setJoueurNouvelleArme(`${joueur.nom}_${joueur.id}`, arme)
     }
 
@@ -142,144 +167,70 @@ class Plateau {
      * @param {String} joueur_selector
      * @param {Arme} arme
      */
-    setJoueurNouvelleArme(joueur_selector,arme){
+    setJoueurNouvelleArme(joueur_selector, arme) {
         $(`.${joueur_selector}`).text(`${arme.degat}`);
         $(`.${joueur_selector}`).css({
-            "background" : `url('${arme.image}') no-repeat`,
-            "background-size" : "contain",
-            "width" : "200px",
-            "height" : "200px",
+            "background": `url('${arme.image}') no-repeat`,
+            "background-size": "contain",
+            "width": "200px",
+            "height": "200px",
         });
     }
 
 
     /**
-     * Place un élément sur le plateau
-     * @param {String} image
-     * @param {String} type
-     * @param {Arme} arme
-     * @param {Personnage} joueur
-     * @param {Number} ligne
-     * @param {Number} colonne
-     * @param {Boolean} remplacement
+     * Place un obstacle sur la grille
+     * @param {String} image le chemin de l'image de l'obstacle
      */
-    placer(type, image = null, arme = null, joueur = null, ligne = null, colonne = null, remplacement = false) {
-        switch (type) {
-            case BLOCK: {
-                let {ligne, colonne} = generator(this.nb_grille - 1)
-                if (this.surface[ligne][colonne].element !== true) {
-                    this.surface[ligne][colonne].obstacle = true;
-                    this.surface[ligne][colonne].element = true;
-                    this.setImage(ligne, colonne, image);
-                } else {
-                    this.placer(type,image)
-                }
-            }
-                break;
-            case ARME: {
-                if (null === ligne && null === colonne){
-                    let {ligne : l, colonne : c} = generator(this.nb_grille - 1)
-                    ligne = l
-                    colonne = c
-                }
-
-                //Quand l'arme est nulle, cela signifit que le joueur vient de prendre
-                //Sa première arme, dans ce cas on libère la zône sur laquelle l'arme était
-                //en mettant à null toutes les coordonnées
-                if (this.surface[ligne][colonne].element === true && null === arme) {
-                    this.surface[ligne][colonne].arme = null;
-                    this.surface[ligne][colonne].element = null;
-                    this.surface[ligne][colonne].aUneArme = null;
-
-                    //Sinon si l'arme n'est pas nulle et que remplacement égale à vraie
-                    //C'est que le joueur veut remplacer son arme courante par une nouvelle
-                    //Dans ce cas, on replace l'ancienne arme à la place de l'arme actuelle prise
-                    //par le joueur
-                }else if (remplacement && null !== arme) {
-                    this.surface[ligne][colonne].arme = arme;
-                    this.surface[ligne][colonne].element = true;
-                    this.surface[ligne][colonne].aUneArme = true;
-                        this.armes.map(a => {
-                            if (a.id === arme.id) {
-                                a.miseAJourDeLaPosition(ligne, colonne)
-                            }
-                        })
-                        this.setImage(ligne, colonne, arme.image);
-                        //Sinon nous somme dans le cas d'une initialisation
-                        // des armes sur la carte
-                } else if(this.surface[ligne][colonne].element !== true && arme !== null) {
-                    this.surface[ligne][colonne].arme = arme;
-                    this.surface[ligne][colonne].element = true;
-                    this.surface[ligne][colonne].aUneArme = true;
-                    this.armes.map(a => {
-                        if (a.id === arme.id) {
-                            a.miseAJourDeLaPosition(ligne, colonne)
-                        }
-                    })
-                    this.setImage(ligne, colonne, arme.image);
-                }else {
-                    this.placer(type, arme.image, arme)
-                }
-            }
-                break;
-            case JOUEUR: {
-                if (null === ligne && colonne === null){
-                    let {ligne : l, colonne : c} = generator(this.nb_grille - 1)
-                    ligne = l
-                    colonne = c
-                }
-                if (
-                    (ligne < this.nb_grille - 1 && this.surface[ligne + 1][colonne].existUnJoueur === true) ||
-                    (ligne > 0 && this.surface[ligne - 1][colonne].existUnJoueur === true)
-                ) {
-                    this.placer( type, joueur.image,null, joueur)
-                } else if (
-                    (colonne < this.nb_grille - 1 && this.surface[ligne][colonne + 1].existUnJoueur === true) ||
-                    (colonne > 0 && this.surface[ligne][colonne - 1].existUnJoueur === true)
-                ) {
-                    this.placer( type, joueur.image,null, joueur)
-                } else {
-                    if (this.surface[ligne][colonne].element !== true) {
-                        this.surface[ligne][colonne].existUnJoueur = true;
-                        this.surface[ligne][colonne].element = true;
-                        this.surface[ligne][colonne].joueur = joueur;
-                        this.miseAJourJoueurPosition(joueur, ligne, colonne);
-                        $(`#grid_${ligne}_${colonne}`).css({
-                            "background-color": "",
-                            "box-shadow": ""
-                        });
-                        this.setImage(ligne, colonne, joueur.image);
-                        this.miseAJourDesDonnesDuJoueur(ligne, colonne, joueur);
-                    }else {
-                        this.placer( type, joueur.image,null, joueur)
-                    }
-                }
-            }
+    placerObstacle(image) {
+        let {ligne, colonne} = generator(this.nb_grille - 1)
+        if (this.surface[ligne][colonne].element !== true) {
+            this.surface[ligne][colonne].obstacle = true;
+            this.surface[ligne][colonne].element = true;
+            this.setImage(ligne, colonne, image);
+        } else {
+            this.placerObstacle(image)
         }
-
     }
 
     /**
-     *
-     * @param {Object} joueur le joueur à mettre à jour la position
+     * Permet de définir les cordonnées du joueur sur la grille
+     * @param {Number} ligne la ligne sur la grille
+     * @param {Number} colonne la colonne sur la grille
+     * @param {Personnage} joueur joueur à  placer
+     */
+    definierCoordonneesJoeur(ligne, colonne, joueur) {
+        this.surface[ligne][colonne].existUnJoueur = true;
+        this.surface[ligne][colonne].element = true;
+        this.surface[ligne][colonne].joueur = joueur;
+        this.miseAJourJoueurPosition(joueur, ligne, colonne);
+        $(`#grid_${ligne}_${colonne}`).css({
+            "background-color": "",
+            "box-shadow": ""
+        });
+        this.setImage(ligne, colonne, joueur.image);
+    }
+
+    /**
+     * Met à jour les cordonnées d'un joueur
+     * @param {Personnage} joueur le joueur à mettre à jour la position
      * @param {Number} ligne la ligne du joueur sur le plateau
      * @param {Number} colonne la colonne du joueur sur le plateau
      */
     miseAJourJoueurPosition(joueur, ligne, colonne) {
-        this.joueurs.map(j => {
-            if (j.id === joueur.id) {
-                //Mise à jour de la position du joueur sur le plateau
-                j.miseAJourDeLaPosition(ligne, colonne)
-            }
-        })
+        //On met à jour les coordonnées(position) du joueur sur la grille
+        joueur.miseAJourPositionCoordonnees(ligne, colonne);
+        let index = this.joueurs.findIndex(j => j.id === joueur.id)
+        //On met à jour les informations dans le store global
+        this.joueurs[index] = joueur
     }
 
     /**
      * Efface les anciennes coordonnées du joueur de la position actuelle
      * lorsqu'il se déplace vers une autre case
      */
-    effacerPositionJoueur(){
-        let {x: ligne, y :colonne} = this.joueur_actuel.position
+    effacerPositionJoueur() {
+        let {x: ligne, y: colonne} = this.joueur_actuel.position
         this.surface[ligne][colonne] = {
             element: null,
             obstacle: null,
@@ -297,12 +248,95 @@ class Plateau {
         $(`#grid_${ligne}_${colonne}`).css("background", "");
     }
 
-    debuguer() {
+    deboguer() {
         console.log(this.surface)
         console.log(this.armes)
         console.log(this.joueurs)
         console.log(this.joueur_actuel)
     }
 
+    /**
+     * Permet de placer un joueur sur la grille
+     * @param {Personnage} joueur joueur à placer sur la grille
+     * @param {Boolean} initialisation permet de savoir si nous
+     * somme à l'initialisation de la grille afin de placer les armes de façon
+     * aléatoire
+     * @param {Number} ligne la ligne sur la grille
+     * @param {Number} colonne la colonne sur la grille
+     */
+    placerJoueur(joueur, initialisation = false, ligne = null, colonne = null) {
+        //Si nous sommes dans une initialisation, on génère les lignes et colonnes
+        //de façon aléatoire
+        if (initialisation) {
+            //On génère une ligne et colonne aléatoire
+            let {ligne: l, colonne: c} = generator(this.nb_grille - 1)
+            ligne = l
+            colonne = c
+        }
+        if (
+            (ligne < this.nb_grille - 1 && this.surface[ligne + 1][colonne].existUnJoueur === true) ||
+            (ligne > 0 && this.surface[ligne - 1][colonne].existUnJoueur === true)
+        ) {
+            this.placerJoueur(joueur, true)
+        } else if (
+            (colonne < this.nb_grille - 1 && this.surface[ligne][colonne + 1].existUnJoueur === true) ||
+            (colonne > 0 && this.surface[ligne][colonne - 1].existUnJoueur === true)
+        ) {
+            this.placerJoueur(joueur, true)
+        } else {
+            if (this.surface[ligne][colonne].element !== true) {
+                this.definierCoordonneesJoeur(ligne, colonne, joueur);
+            } else {
+                this.placerJoueur(joueur, true)
+            }
+        }
+    }
 
+    /**
+     * Permet de placer une arme sur la grille
+     * @param {Number} ligne la ligne sur la grille
+     * @param {Number} colonne la colonne sur la grille
+     * @param {Arme} arme l'arme à placer sur la grille
+     * @param {Boolean} initialisation permet de savoir si nous
+     * somme à l'initialisation de la grille afin de placer les armes de façon
+     * aléatoire
+     */
+    placerArme(ligne = null, colonne = null, arme, initialisation = false) {
+        if (initialisation) {
+            //On génère une ligne et colonne aléatoire
+            let {ligne, colonne} = generator(this.nb_grille - 1)
+            //Si sur la ligne et colonne générées, il n'ya pas déjà un élement
+            if (this.surface[ligne][colonne].element !== true) {
+                //On définit les coordonées de l'arme sur la grille
+                //et on l'affiche
+                this.definirArmeCoordonnees(ligne, colonne, arme);
+            } else {
+                //Sinon on rappelle la fonction pour générée une nouvelle position
+                this.placerArme(ligne, colonne, arme, true)
+            }
+        } else {
+            //Dans le cas contraire, nous sommes dans le cas ou nous plaçons
+            //manuellement les armes.
+            //Exemple : lorsqu'un joueur change son arme
+            this.definirArmeCoordonnees(ligne, colonne, arme);
+        }
+
+    }
+
+    /**
+     * Permet de définir les coordonnées d'une arme et de l'afficher sur la grille
+     * @param {Number} ligne la ligne sur la grille
+     * @param {Number} colonne la colonne sur la grille
+     * @param {Arme} arme l'arme à afficher
+     */
+    definirArmeCoordonnees(ligne, colonne, arme) {
+        this.surface[ligne][colonne].arme = arme;
+        this.surface[ligne][colonne].element = true;
+        this.surface[ligne][colonne].aUneArme = true;
+        let index = this.armes.findIndex(a => a.id === arme.id)
+        //On met à jour les coordonnées de l'arme
+        this.armes[index].miseAJourDeLaPosition(ligne, colonne)
+        //On met à jour l'image de l'arme
+        this.setImage(ligne, colonne, arme.image);
+    }
 }

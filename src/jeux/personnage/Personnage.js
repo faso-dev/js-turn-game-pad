@@ -91,7 +91,7 @@ class Personnage {
      * @param {Number} ligne
      * @param {Number} colonne
      */
-    miseAJourDeLaPosition(ligne, colonne){
+    miseAJourPositionCoordonnees(ligne, colonne){
         this.position.x = ligne
         this.position.y = colonne
     }
