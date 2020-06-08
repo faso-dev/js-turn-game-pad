@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Mon jeux de plateau</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 <body>
@@ -34,7 +35,7 @@
                         </div>
                         <div class="card-body">
                             <p>
-                                <strong>Force : </strong> <span class="joueur-force"></span>
+                                <strong>Force restante : </strong> <span class="joueur-force"></span>
                             </p>
                             <p>
                                 <strong>Force de frappe : </strong> <span class="joueur-force-frappe"></span>
@@ -43,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-8" id="jeux-conteneur">
                 <jeux-de-tour/>
             </div>
             <div id="joueur-deux" class="col-lg-2 pl-2">
@@ -70,7 +71,7 @@
                         </div>
                         <div class="card-body">
                             <p>
-                                <strong>Force : </strong> <span class="joueur-force"></span>
+                                <strong>Force restante : </strong> <span class="joueur-force"></span>
                             </p>
                             <p>
                                 <strong>Force de frappe : </strong> <span class="joueur-force-frappe"></span>
@@ -91,6 +92,7 @@
 <script src="./src/jeux/plateau/Plateau.js"></script>
 <script src="./src/jeux/actions/Mouvement.js"></script>
 <script src="./src/jeux/actions/Action.js"></script>
+<script src="./src/html/custom/VictoireElement.js"></script>
 <script src="./src/html/custom/FightElement.js"></script>
 <script src="./src/html/custom/GameElement.js"></script>
 <script src="./src/jeux/main.js"></script>

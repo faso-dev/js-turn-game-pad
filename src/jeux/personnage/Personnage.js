@@ -93,11 +93,22 @@ class Personnage {
      * @param {Number} degat le dégât à affliger au joueur
      */
     miseAJourDeLaForce(degat){
+        if (this.estEnDefence){
+            degat /= 2
+        }
         if (degat >= this.force){
             this.force = 0
         }else {
             this.force -= degat
         }
+    }
+
+    /**
+     * Permet de se défendre
+     * @param {Boolean} statut
+     */
+    defendre(statut){
+        this.estEnDefence = statut
     }
 
     /**

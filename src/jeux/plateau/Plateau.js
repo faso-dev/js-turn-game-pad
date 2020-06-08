@@ -44,8 +44,8 @@ class Plateau {
             }
         }
         this.joueur_actuel = this.joueurs[Math.floor(Math.random() * this.joueurs.length)];
-        $(".grid").width(760 / this.nb_grille);
-        $(".grid").height(760 / this.nb_grille);
+        $(".grid").width(760 / this.nb_grille)
+            .height(760 / this.nb_grille);
         this.informationsInitialsJoueurs();
     }
 
@@ -58,20 +58,30 @@ class Plateau {
             "width": `${280}px`,
             "height": `${280}px`
         })
-        $('#joueur-un').addClass(`data-${this.joueur_actuel.id}`)
-        $('#joueur-un .joueur-force').text(this.joueur_actuel.force)
-        $('#joueur-un .joueur-force-frappe').text(this.joueur_actuel.force_de_frappe)
+        $('#joueur-un').data('joueur', this.joueur_actuel.id)
+                        .addClass(`data-${this.joueur_actuel.id}`)
+        $('#joueur-un .joueur-force')
+            .text(this.joueur_actuel.force)
+            .attr('id', this.joueur_actuel.id)
+        $('#joueur-un .joueur-force-frappe')
+            .text(this.joueur_actuel.force_de_frappe)
 
         let nexJoueur = this.joueurs.find(j => j.id !== this.joueur_actuel.id)
-        $('#joueur-deux .joueur-nom').text(nexJoueur.nom)
-        $('#joueur-deux .joueur-image').css({
+        $('#joueur-deux .joueur-nom')
+            .text(nexJoueur.nom)
+        $('#joueur-deux .joueur-image')
+            .css({
             'background': `url('${nexJoueur.image}') no-repeat`,
             "background-size": "contain",
             "width": `${280}px`,
             "height": `${280}px`
         })
-        $('#joueur-deux').addClass(`data-${nexJoueur.id}`)
-        $('#joueur-deux .joueur-force').text(nexJoueur.force)
+        $('#joueur-deux')
+            .data('joueur', nexJoueur.id)
+            .addClass(`data-${nexJoueur.id}`)
+        $('#joueur-deux .joueur-force')
+            .text(nexJoueur.force)
+            .attr('id', nexJoueur.id)
         $('#joueur-deux .joueur-force-frappe').text(nexJoueur.force_de_frappe)
     }
 
@@ -117,8 +127,7 @@ class Plateau {
             "background-size": "contain",
             "width": `${760 / this.nb_grille}px`,
             "height": `${760 / this.nb_grille}px`
-        });
-        $(`#grid_${ligne}_${colonne}`).removeClass('ombre-arme');
+        }).removeClass('ombre-arme');
     }
 
     /**
@@ -170,39 +179,19 @@ class Plateau {
      * @param {Personnage} joueur
      */
     miseAJourDonneesJoueur(joueur) {
-        $(`.data-${joueur.id} .joueur-arme-nom`).text(joueur.arme.nom)
-        $(`.data-${joueur.id} .joueur-arme-degat`).text(joueur.arme.degat)
-        $(`.data-${joueur.id} .joueur-arme-image`).css({
+        $(`.data-${joueur.id} .joueur-arme-nom`)
+            .text(joueur.arme.nom)
+        $(`.data-${joueur.id} .joueur-arme-degat`)
+            .text(joueur.arme.degat)
+        $(`.data-${joueur.id} .joueur-arme-image`)
+            .css({
             'background': `url('${joueur.arme.image}') no-repeat`,
             "background-size": "contain",
             "width": `${150}px`,
             "height": `${150}px`
         })
-        $(`.data-${joueur.id} .joueur-force-frappe`).text(joueur.force_de_frappe)
-    }
-
-    /**
-     *
-     * @param {Personnage} joueur le joueur à mettre les infos sur le graphique
-     * @param {Arme} arme la nouvelle arme
-     */
-    miseAJourDeLInterfaceDUnJoueur(joueur, arme) {
-        this.setJoueurNouvelleArme(`${joueur.nom}_${joueur.id}`, arme)
-    }
-
-    /**
-     * Rend les nouvelles informations du joueur
-     * @param {String} joueur_selector
-     * @param {Arme} arme
-     */
-    setJoueurNouvelleArme(joueur_selector, arme) {
-        $(`.${joueur_selector}`).text(`${arme.degat}`);
-        $(`.${joueur_selector}`).css({
-            "background": `url('${arme.image}') no-repeat`,
-            "background-size": "contain",
-            "width": "200px",
-            "height": "200px",
-        });
+        $(`.data-${joueur.id} .joueur-force-frappe`)
+            .text(joueur.force_de_frappe)
     }
 
 
@@ -232,7 +221,8 @@ class Plateau {
         this.surface[ligne][colonne].element = true;
         this.surface[ligne][colonne].joueur = joueur;
         this.miseAJourJoueurPosition(joueur, ligne, colonne);
-        $(`#grid_${ligne}_${colonne}`).css({
+        $(`#grid_${ligne}_${colonne}`)
+            .css({
             "background-color": "",
             "box-shadow": ""
         });

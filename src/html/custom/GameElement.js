@@ -2,6 +2,7 @@
 function createJeuxConteneur(selector) {
     return `
         <div id="${selector}" class="mt-5"></div>
+        
     `
 }
 
@@ -32,10 +33,9 @@ class GameElement extends HTMLElement{
         plateau.placerUnObstacle()
         plateau.placerLesArmes()
         plateau.placerLesJoueurs()
-        let mouvement = new Mouvement(),
-            action = new Action();
+        let mouvement = new Mouvement()
         mouvement.activerLesZonesAccessibleAuxJoueurs(plateau)
-        this.ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement, action)
+        this.ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement)
 
     }
 
@@ -43,9 +43,8 @@ class GameElement extends HTMLElement{
      *
      * @param {Plateau} plateau
      * @param {Mouvement} mouvement
-     * @param {Action} action
      */
-    ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement, action){
+    ecouterLesEvenementsDeCliqueSurLePlateau(plateau, mouvement){
         $(document).on('click', '.grid', e => {
             let ligne = Number(e.target.dataset.ligne),
                 colonne = Number(e.target.dataset.colonne),
@@ -80,7 +79,15 @@ class GameElement extends HTMLElement{
                 let combat = plateau.estCeEnPostionDeCombat(ligne, colonne)
                 if (combat){
                     //TODO: initialisation du combat
-                    $('#conteneur-de-jeux').parentNode.replaceWith(new FightElement())
+                    let j1Index = $('#joueur-un').data('joueur'),
+                        j2Index = $('#joueur-deux').data('joueur')
+
+                    let j1 = plateau.joueurs.find( j => j.id === parseInt(j1Index)),
+                        j2 = plateau.joueurs.find( j => j.id === parseInt(j2Index))
+                    let action = new Action([j1, j2]);
+                    let combat = new FightElement(action)
+                    $('#conteneur-de-jeux').parent().replaceWith(combat)
+                    combat.combatActionListener()
                     alert('Position combat')
                 }
                 remplacementArme = false
