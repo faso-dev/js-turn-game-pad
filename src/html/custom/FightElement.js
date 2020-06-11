@@ -97,7 +97,7 @@ class FightElement extends HTMLElement{
                 jIndex1 =  this.action.joueurs.findIndex( j => j.id === jClickIndex)
             this.action.joueurs[jIndex1].defendre(true)
             this.actionPanel(e.target.id)
-            this.actionPanel(e.target.id.split('-')[0]+ '-' + (jClickIndex === 1 ? 2 : 1), true)
+            this.actionPanel(e.target.id.split('-')[0]+ '-' + (jClickIndex === 1 ? 2 : 1), false)
             this.miseAjourInformationsCombatInterface(jClickIndex, jIndex2);
         })
 

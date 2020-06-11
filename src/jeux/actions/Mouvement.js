@@ -17,6 +17,12 @@ class Mouvement {
                 if (colonne < 0) {
                     break; //On est en dehors de la grille
                 }
+                if (
+                    (plateau.surface[ligne][colonne].obstacle === true) ||
+                    (plateau.surface[ligne][colonne].existUnJoueur === true)
+                ) {
+                    break;
+                }
                 this.nouvelITineraire(plateau, ligne, colonne, remplacement);
             }
         }
@@ -38,6 +44,12 @@ class Mouvement {
                 if (colonne >= plateau.nb_grille) {
                     break; //On est en dehors de la grille
                 }
+                if (
+                    (plateau.surface[ligne][colonne].obstacle === true) ||
+                    (plateau.surface[ligne][colonne].existUnJoueur === true)
+                ) {
+                    break;
+                }
                 this.nouvelITineraire(plateau, ligne, colonne, remplacement);
             }
         }
@@ -58,6 +70,12 @@ class Mouvement {
                 if (ligne < 0) {
                     break; //On est en dehors de la grille
                 }
+                if (
+                    (plateau.surface[ligne][colonne].obstacle === true) ||
+                    (plateau.surface[ligne][colonne].existUnJoueur === true)
+                ) {
+                    break;
+                }
                 this.nouvelITineraire(plateau, ligne, colonne, remplacement);
             }
         }
@@ -72,12 +90,6 @@ class Mouvement {
      * @param {Boolean} remplacement
      */
     nouvelITineraire(plateau, ligne, colonne, remplacement) {
-        if (
-            (plateau.surface[ligne][colonne].obstacle === true) ||
-            (plateau.surface[ligne][colonne].existUnJoueur === true)
-        ) {
-            return;
-        }
         //A l'initialisation du plateau, si y'a pas d'arme sur
         // la position {ligne, colonne}, on définit la couleur
         // qui permet de notifier qu'un joueur peut accèder à cette
@@ -116,6 +128,12 @@ class Mouvement {
                 if (ligne >= plateau.nb_grille) {
                     break; //On est en dehors de la grille
                 }
+                if (
+                    (plateau.surface[ligne][colonne].obstacle === true) ||
+                    (plateau.surface[ligne][colonne].existUnJoueur === true)
+                ) {
+                    break;
+                }
                 this.nouvelITineraire(plateau, ligne, colonne, remplacement);
             }
         }
@@ -132,6 +150,13 @@ class Mouvement {
             ligne = ligne - 1; // on diminue la ligne à chaque itération pour aller vers le haut
             if (ligne < 0) {
                 break; //On stope la boucle car nous sommes en dehors de la grille
+            }
+            //S'il y'a un obstacle ou un joueur, on stope la boucle
+            if (
+                (plateau.surface[ligne][colonne].obstacle === true) ||
+                (plateau.surface[ligne][colonne].existUnJoueur === true)
+            ) {
+                break;
             }
             //On marque cette zône innaccessible
             this.desactiverUneZone(plateau, ligne, colonne);
@@ -151,6 +176,13 @@ class Mouvement {
             if (ligne >= plateau.nb_grille) {
                 break; //On stope la boucle car nous sommes en dehors de la grille
             }
+            //S'il y'a un obstacle ou un joueur, on stope la boucle
+            if (
+                (plateau.surface[ligne][colonne].obstacle === true) ||
+                (plateau.surface[ligne][colonne].existUnJoueur === true)
+            ) {
+                break;
+            }
             //On marque cette zône innaccessible
             this.desactiverUneZone(plateau, ligne, colonne);
         }
@@ -167,6 +199,13 @@ class Mouvement {
             colonne = colonne - 1; //on diminue la colonne à chaque itération pour aller vers la gauche
             if (colonne < 0) {
                 break; //On stope la boucle car nous sommes en dehors de la surface de la grille
+            }
+            //S'il y'a un obstacle ou un joueur, on stope la boucle
+            if (
+                (plateau.surface[ligne][colonne].obstacle === true) ||
+                (plateau.surface[ligne][colonne].existUnJoueur === true)
+            ) {
+                break;
             }
             //Sinon on marque cette zone inaccessible
             this.desactiverUneZone(plateau, ligne, colonne);
@@ -186,6 +225,13 @@ class Mouvement {
             if (colonne >= plateau.nb_grille) {
                 break; //On stope la boucle car nous sommes en dehors de la surface de la grille
             }
+            //S'il y'a un obstacle ou un joueur, on stope la boucle
+            if (
+                (plateau.surface[ligne][colonne].obstacle === true) ||
+                (plateau.surface[ligne][colonne].existUnJoueur === true)
+            ) {
+                break;
+            }
             //Sinon on marque cette zone inaccessible
             this.desactiverUneZone(plateau, ligne, colonne);
 
@@ -199,13 +245,6 @@ class Mouvement {
      * @param {Number} colonne
      */
     desactiverUneZone(plateau, ligne, colonne){
-        //S'il y'a un obstacle ou un joueur, on stope la boucle
-        if (
-            (plateau.surface[ligne][colonne].obstacle === true) ||
-            (plateau.surface[ligne][colonne].existUnJoueur === true)
-        ) {
-            return;
-        }
         //S'il n'y a pas une arme sur la position{ligne, colonne}
         if ((plateau.surface[ligne][colonne].aUneArme !== true)) {
             //On marque cette zone innaccessible
