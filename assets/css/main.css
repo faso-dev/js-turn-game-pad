@@ -42,3 +42,12 @@
     text-align: center;
     color: green;
 }
+.text-green{
+    color: green;
+}
+
+.btn-primary, .btn-primary:hover{
+    background: green;
+    color: white;
+    border-color: green;
+}
