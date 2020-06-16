@@ -27,13 +27,13 @@ class FightElement extends HTMLElement{
                                     <button 
                                             class="btn btn-danger" 
                                             data-joueur="${this.action.joueurs[0].id}" 
-                                            id="attaquer-1">
+                                            id="attaquer-${this.action.joueurs[0].id}">
                                             Attaquer <span class="arme"></span>
                                     </button>
                                     <button 
                                             class="btn btn-success" 
                                             data-joueur="${this.action.joueurs[0].id}" 
-                                            id="defendre-1">
+                                            id="defendre-${this.action.joueurs[0].id}">
                                             Défendre
                                     </button>
                                 </div>
@@ -44,13 +44,13 @@ class FightElement extends HTMLElement{
                                     <button 
                                                 class="btn btn-danger" 
                                                 data-joueur="${this.action.joueurs[1].id}"
-                                                id="attaquer-2">
+                                                id="attaquer-${this.action.joueurs[1].id}">
                                             Attaquer <span class="arme"></span>
                                     </button>
                                     <button 
                                                 class="btn btn-success" 
                                                 data-joueur="${this.action.joueurs[1].id}" 
-                                                id="defendre-2">
+                                                id="defendre-${this.action.joueurs[1].id}">
                                                 Défendre
                                     </button>
                                  </div>
@@ -98,6 +98,7 @@ class FightElement extends HTMLElement{
             this.action.joueurs[jIndex1].defendre(true)
             this.actionPanel(e.target.id)
             this.actionPanel(e.target.id.split('-')[0]+ '-' + (jClickIndex === 1 ? 2 : 1), false)
+            console.log(jClickIndex)
             this.miseAjourInformationsCombatInterface(jClickIndex, jIndex2);
         })
 
@@ -113,6 +114,7 @@ class FightElement extends HTMLElement{
      * @param {Boolean} handle détermine si on active ou désactive le panel du joueur
      */
     actionPanel(joueurSelector, handle = true){
+        console.log(joueurSelector, handle)
         $(`#${joueurSelector}`).parent().children('button').attr('disabled', handle)
     }
 

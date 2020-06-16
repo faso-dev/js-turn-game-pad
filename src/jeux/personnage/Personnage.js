@@ -94,7 +94,7 @@ class Personnage {
      */
     miseAJourDeLaForce(degat){
         if (this.estEnDefence){
-            degat /= 2
+            degat = degat - ((50 * degat) / 100)
         }
         if (degat >= this.force){
             this.force = 0

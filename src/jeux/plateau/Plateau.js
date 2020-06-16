@@ -366,9 +366,9 @@ class Plateau {
      */
     estCeEnPostionDeCombat(ligne, colonne){
         return (ligne < this.nb_grille -1 && this.surface[ligne + 1][colonne].existUnJoueur === true) ||
-            (ligne > 0 && ligne < this.nb_grille -1 && this.surface[ligne - 1][colonne].existUnJoueur === true) ||
-            (colonne < this.nb_grille -1 && this.surface[ligne - 1][colonne].existUnJoueur === true) ||
-            (colonne > this.nb_grille -1 && this.surface[ligne - 1][colonne].existUnJoueur === true)
+            (ligne > 0 && this.surface[ligne - 1][colonne].existUnJoueur === true) ||
+            (colonne < this.nb_grille -1 && this.surface[ligne][colonne+1].existUnJoueur === true) ||
+            (colonne > 0 && this.surface[ligne][colonne-1].existUnJoueur === true)
 
     }
 }

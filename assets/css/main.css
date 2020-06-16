@@ -27,9 +27,9 @@
     box-shadow: 5px 5px 5px black;
 }
 .card-header{
-    background-color: rgba(98, 67, 255, 0.62);
+    background-color: green;
     color: white;
-    border-color: rgba(98, 67, 255, 0.62);
+    border-color: green;
     font-weight: 900;
 }
 .card-body{
@@ -37,9 +37,8 @@
     font-family: "Arial", sans-serif;
 }
 .joueur-nom{
-    font-size: 35px;
     font-weight: 900;
     padding-top: 5px;
     text-align: center;
-    color: darkkhaki;
+    color: green;
 }
