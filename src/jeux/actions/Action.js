@@ -1,4 +1,11 @@
 /**
+ * Ce bout de code est une propriété de Jerôme S.C Daniel Onadja(faso-dev)
+ * @author Jerôme S.C Daniel Onadja <jeromeonadja28@gmail.com>
+ * @copyright 2020 | Tous droit reservés
+ * @licence MIT propulsé par <faso-dev> https://faso-dev.herokuapp.com
+ */
+
+/**
  * Classe spécialisée pour le combat
  */
 class Action {
@@ -11,14 +18,6 @@ class Action {
         this.joueurs = joueurs
     }
 
-    /**
-     *
-     * @param {Number} id
-     * @returns {Personnage}
-     */
-    get(id){
-        return this.joueurs.find( j => j.id === id)
-    }
     /**
      * Permet au joueur d'attaquer
      * @param {Number} sourceIndex

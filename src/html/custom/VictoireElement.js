@@ -1,3 +1,14 @@
+/**
+ * Ce bout de code est une propriété de Jerôme S.C Daniel Onadja(faso-dev)
+ * @author Jerôme S.C Daniel Onadja <jeromeonadja28@gmail.com>
+ * @copyright 2020 | Tous droit reservés
+ * @licence MIT propulsé par <faso-dev> https://faso-dev.herokuapp.com
+ */
+
+
+/**
+ * Composant personalisé pour rendre la victoire d'un joueur
+ */
 class VictoireElement extends HTMLElement{
     /**
      * Le gagnant du combat
@@ -10,7 +21,7 @@ class VictoireElement extends HTMLElement{
     }
 
     /**
-     *
+     * Le code html du composant
      * @returns {string}
      */
     celebrer(){
@@ -30,5 +41,5 @@ class VictoireElement extends HTMLElement{
         `
     }
 }
-
+//Enregistrement de notre composant personalisé
 customElements.define('jeu-victoire', VictoireElement)

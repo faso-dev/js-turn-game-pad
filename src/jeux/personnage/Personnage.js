@@ -1,7 +1,12 @@
 /**
- * Class Personnage
- * @copyright 2020 | All rights reserved
- * @author faso-dev
+ * Ce bout de code est une propriété de Jerôme S.C Daniel Onadja(faso-dev)
+ * @author Jerôme S.C Daniel Onadja <jeromeonadja28@gmail.com>
+ * @copyright 2020 | Tous droit reservés
+ * @licence MIT propulsé par <faso-dev> https://faso-dev.herokuapp.com
+ */
+
+/**
+ * Class Personnage pour créer les joueurs
  */
 class Personnage {
     id;

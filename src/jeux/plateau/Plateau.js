@@ -1,7 +1,13 @@
-const BLOCK = 'BLOCK'
-const ARME = 'ARME'
-const JOUEUR = 'JOUEUR'
+/**
+ * Ce bout de code est une propriété de Jerôme S.C Daniel Onadja(faso-dev)
+ * @author Jerôme S.C Daniel Onadja <jeromeonadja28@gmail.com>
+ * @copyright 2020 | Tous droit reservés
+ * @licence MIT propulsé par <faso-dev> https://faso-dev.herokuapp.com
+ */
 
+/**
+ * Classe responsable de l'initialisation du jeux de plateau
+ */
 class Plateau {
     armes;
     joueurs;
@@ -22,6 +28,9 @@ class Plateau {
         this.joueur_actuel = null
     }
 
+    /**
+     * Initialisation de la grille
+     */
     init() {
         for (let ligne = 0; ligne < this.nb_grille; ligne++) {
             this.surface[ligne] = []
@@ -66,23 +75,32 @@ class Plateau {
         $('#joueur-un .joueur-force-frappe')
             .text(this.joueur_actuel.force_de_frappe)
 
-        let nexJoueur = this.joueurs.find(j => j.id !== this.joueur_actuel.id)
-        $('#joueur-deux .joueur-nom')
-            .text(nexJoueur.nom)
+        let joueurSuivantIndex = this.joueurs.findIndex(j => j.id !== this.joueur_actuel.id),
+                joueurSuivant = this.joueurs[joueurSuivantIndex]
+            $('#joueur-deux .joueur-nom')
+            .text(joueurSuivant.nom)
         $('#joueur-deux .joueur-image')
             .css({
-            'background': `url('${nexJoueur.image}') no-repeat`,
+            'background': `url('${joueurSuivant.image}') no-repeat`,
             "background-size": "contain",
             "width": `${280}px`,
             "height": `${280}px`
         })
         $('#joueur-deux')
-            .data('joueur', nexJoueur.id)
-            .addClass(`data-${nexJoueur.id}`)
+            .data('joueur', joueurSuivant.id)
+            .addClass(`data-${joueurSuivant.id}`)
         $('#joueur-deux .joueur-force')
-            .text(nexJoueur.force)
-            .attr('id', nexJoueur.id)
-        $('#joueur-deux .joueur-force-frappe').text(nexJoueur.force_de_frappe)
+            .text(joueurSuivant.force)
+            .attr('id', joueurSuivant.id)
+        $('#joueur-deux .joueur-force-frappe').text(joueurSuivant.force_de_frappe)
+        //On attribut l'arme avec le plus petit dégat aux joueurs sur la grille
+        this.joueur_actuel.arme = this.armes.find( a =>  a.degat === 10)
+        joueurSuivant.arme = this.armes.find( a =>  a.degat === 10)
+        this.joueurs[joueurSuivantIndex] = joueurSuivant
+
+        //On met à jour les informations des joueurs sur le graphique
+        this.miseAJourDonneesJoueur(joueurSuivant)
+        this.miseAJourDonneesJoueur(this.joueur_actuel)
     }
 
     /**
@@ -102,7 +120,9 @@ class Plateau {
      */
     placerLesArmes() {
         this.armes.forEach(arme => {
-            this.placerArme(null, null, arme, true)
+            //On affiche plus l'arme qui a le plus petit dégât car tous les joueurs a possède déjà
+            if (arme.degat !== 10)
+                this.placerArme(null, null, arme, true)
         })
     }
 
@@ -179,6 +199,7 @@ class Plateau {
      * @param {Personnage} joueur
      */
     miseAJourDonneesJoueur(joueur) {
+        console.log(joueur)
         $(`.data-${joueur.id} .joueur-arme-nom`)
             .text(joueur.arme.nom)
         $(`.data-${joueur.id} .joueur-arme-degat`)

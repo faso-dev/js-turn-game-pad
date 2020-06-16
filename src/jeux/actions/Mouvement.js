@@ -1,4 +1,11 @@
 /**
+ * Ce bout de code est une propriété de Jerôme S.C Daniel Onadja(faso-dev)
+ * @author Jerôme S.C Daniel Onadja <jeromeonadja28@gmail.com>
+ * @copyright 2020 | Tous droit reservés
+ * @licence MIT propulsé par <faso-dev> https://faso-dev.herokuapp.com
+ */
+
+/**
  * Classe spécialisée dans les mouvents des joueurs sur le plateau
  */
 class Mouvement {
@@ -8,7 +15,7 @@ class Mouvement {
      * @param {Plateau} plateau
      * @param {Boolean} remplacement
      */
-    aGauche(plateau, remplacement) {
+    allerAGauche(plateau, remplacement) {
         let {x: ligne, y: colonne} = plateau.joueur_actuel.position;
         if (plateau.surface[ligne][colonne].existUnJoueur === true) {
             //On affiche si possible les 3 zônes accessible à gauche
@@ -33,7 +40,7 @@ class Mouvement {
      * @param {Plateau} plateau
      * @param {Boolean} remplacement
      */
-    aDroite(plateau, remplacement) {
+    allerADroite(plateau, remplacement) {
         let {x: ligne, y: colonne} = plateau.joueur_actuel.position;
 
         //Si on a un joueur est à la position{ligne, colonne}
@@ -60,7 +67,7 @@ class Mouvement {
      * @param {Plateau} plateau
      * @param {Boolean} remplacement
      */
-    enHaut(plateau, remplacement) {
+    allerEnHaut(plateau, remplacement) {
         let {x: ligne, y: colonne} = plateau.joueur_actuel.position;
         //Si on a un joueur est à la position{ligne, colonne}
         if (plateau.surface[ligne][colonne].existUnJoueur === true) {
@@ -98,8 +105,7 @@ class Mouvement {
             plateau.surface[ligne][colonne].peutSeDeplacer = true;
             $(`#grid_${ligne}_${colonne}`).addClass('accessible');
         }
-        //Sinon si on veut remplacer une arme par une autre, on supprime le background
-            // de cette position
+        //Sinon si on veut remplacer une arme par une autre, on supprime l'effet css
         else if (remplacement) {
             $(`#grid_${ligne}_${colonne}`).removeClass('ombre-arme');
             plateau.surface[ligne][colonne].peutSeDeplacer = true;
@@ -118,7 +124,7 @@ class Mouvement {
      * @param {Plateau} plateau
      * @param {Boolean} remplacement
      */
-    enBas(plateau, remplacement) {
+    allerEnBas(plateau, remplacement) {
         let {x: ligne, y: colonne} = plateau.joueur_actuel.position;
         //Si on a un joueur à la position{ligne, colonne}
         if (plateau.surface[ligne][colonne].existUnJoueur === true) {
@@ -249,10 +255,12 @@ class Mouvement {
         if ((plateau.surface[ligne][colonne].aUneArme !== true)) {
             //On marque cette zone innaccessible
             plateau.surface[ligne][colonne].peutSeDeplacer = false;
-            $(`#grid_${ligne}_${colonne}`).removeClass('accessible');
+            $(`#grid_${ligne}_${colonne}`).removeClass('accessible')
+                                          .removeClass('ombre-arme');
         }else {//Sinon si nous faisons face à un obstacle ou un joueur
             plateau.surface[ligne][colonne].peutSeDeplacer = false;
-            $(`#grid_${ligne}_${colonne}`).addClass('inaccessible');
+            $(`#grid_${ligne}_${colonne}`).addClass('inaccessible')
+                                          .removeClass('ombre-arme');
         }
     }
     /**
@@ -261,10 +269,10 @@ class Mouvement {
      * @param {Boolean} remplacement
      */
     activerLesZonesAccessibleAuxJoueurs(plateau, remplacement = false){
-        this.enHaut(plateau, remplacement)
-        this.enBas(plateau, remplacement)
-        this.aGauche(plateau, remplacement)
-        this.aDroite(plateau, remplacement)
+        this.allerEnHaut(plateau, remplacement)
+        this.allerEnBas(plateau, remplacement)
+        this.allerAGauche(plateau, remplacement)
+        this.allerADroite(plateau, remplacement)
     }
 
     /**

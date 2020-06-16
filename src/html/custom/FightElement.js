@@ -1,11 +1,18 @@
 /**
- *
+ * Ce bout de code est une propriété de Jerôme S.C Daniel Onadja(faso-dev)
+ * @author Jerôme S.C Daniel Onadja <jeromeonadja28@gmail.com>
+ * @copyright 2020 | Tous droit reservés
+ * @licence MIT propulsé par <faso-dev> https://faso-dev.herokuapp.com
+ */
+
+/**
+ * Composant personalisé pour le combat
  */
 class FightElement extends HTMLElement{
     action
     /**
-     *
-     * @param {Action} action
+     * Constructeur du composant de combat
+     * @param {Action} action le gestionnaire des actions
      */
     constructor(action) {
         super();
@@ -13,6 +20,10 @@ class FightElement extends HTMLElement{
         this.innerHTML = this.initialserLeCombat()
     }
 
+    /**
+     * Crée le code html du composant combat
+     * @returns {string} le composant html du combat
+     */
     initialserLeCombat(){
         return `
                 <div class="card" style="margin-top: 300px;">
@@ -65,47 +76,69 @@ class FightElement extends HTMLElement{
      * Ecoute les évenements liés au click sur les boutons de combat
      */
     combatActionListener(){
+        //Sert à définir le gagnant à la fin du jeu
         let gagnant = null
+        //On écoute les clics sur les bouttons d'attaques
         $(document).on('click', '#attaquer-1, #attaquer-2', e => {
-            let jClickIndex = parseInt(e.target.dataset.joueur),
-                jIndex2 =  this.action.joueurs.findIndex( j => j.id !== jClickIndex),
-                jIndex1 =  this.action.joueurs.findIndex( j => j.id === jClickIndex)
-
+            //L'identifiant du joueur qui a cliqué sur le boutton d'attaque
+            let jClickId = parseInt(e.target.dataset.joueur),
+                //L'index du joueur attaqué
+                jIndex2 =  this.action.joueurs.findIndex( j => j.id !== jClickId),
+                //L'index du joueur attaquant
+                jIndex1 =  this.action.joueurs.findIndex( j => j.id === jClickId)
+            //Le joueur attaquant attaque le joueur attaqué
             this.action.attaquer(jIndex1, jIndex2)
+            //On réinitialise la défense de tous les joueurs
             this.action.joueurs[jIndex1].defendre(false)
             this.action.joueurs[jIndex2].defendre(false)
-            //On met à jour la force restante du joueur dans l'interface du jeux
-            this.miseAjourInformationsCombatInterface(jClickIndex, jIndex2, jIndex1);
+            //On met à jour la force restante du joueur attaqué dans l'interface du jeux
+            this.miseAjourInformationsCombatInterface(jClickId, jIndex2, jIndex1);
             //On vérifie à chaque fois qui est le gagnat enfin de mettre fin au jeux
             if (this.action.joueurs[jIndex1].force === 0){
                 gagnant = this.action.joueurs[jIndex2]
             }else if (this.action.joueurs[jIndex2].force === 0){
                 gagnant = this.action.joueurs[jIndex1]
             }
+            //Si on a un gagnant
             if (gagnant){
+                //On remplace le composant de combât par celui de la victoire
                 $('#jeux-conteneur').html(new VictoireElement(gagnant))
-                this.miseAjourInformationsCombatInterface(jClickIndex, jIndex2);
+                //On met à jour les infos des deux joueurs(force restante)
+                this.miseAjourInformationsCombatInterface(jClickId, jIndex2);
             }
-
+            //On désactive le panel d'action(boutton de défense et d'attaque)
+            // du joueur attaquant
             this.actionPanel(e.target.id)
-            this.actionPanel(e.target.id.split('-')[0]+ '-' + (jClickIndex === 1 ? 2 : 1), false)
+            //Puis on active le panel d'action(boutton de défense et d'attaque)
+            // du joueur attaqué pour qu'il puisse à son tour attaquer ou se défendre
+            this.actionPanel(e.target.id.split('-')[0]+ '-' + (jClickId === 1 ? 2 : 1), false)
         })
 
+        //On écoute les actions de défense chez les deux joueurs
         $(document).on('click', '#defendre-1, #defendre-2', e => {
-            let jClickIndex = parseInt(e.target.dataset.joueur, 10),
-                jIndex2 =  this.action.joueurs.findIndex( j => j.id !== jClickIndex),
-                jIndex1 =  this.action.joueurs.findIndex( j => j.id === jClickIndex)
+            //L'identifiant du joueur qui veut se défenre
+            let jClickId = parseInt(e.target.dataset.joueur, 10),
+                //L'index du joueur qui veut se défendre
+                jIndex1 =  this.action.joueurs.findIndex( j => j.id === jClickId)
+            //On définit le mode d'attaque du joueur en mode défense
             this.action.joueurs[jIndex1].defendre(true)
+            //On désactive le panel d'action(boutton de défense et d'attaque)
+            // du joueur qui se défend
             this.actionPanel(e.target.id)
-            this.actionPanel(e.target.id.split('-')[0]+ '-' + (jClickIndex === 1 ? 2 : 1), false)
-            console.log(jClickIndex)
-            this.miseAjourInformationsCombatInterface(jClickIndex, jIndex2);
+            //Puis on active le panel d'action(boutton de défense et d'attaque)
+            // du joueur adverse pour qu'il puisse à son tour attaquer ou se défendre
+            this.actionPanel(e.target.id.split('-')[0]+ '-' + (jClickId === 1 ? 2 : 1), false)
         })
 
     }
 
-    miseAjourInformationsCombatInterface(jClickIndex, jIndex2) {
-        $(`#${jClickIndex === 1 ? 2 : 1}`).text(this.action.joueurs[jIndex2].force)
+    /**
+     * Met à jour les informations des joueurs sur le graphique
+     * @param jClickId l'identifiant du joueur qui est attaqué
+     * @param jIndex2 l'index du joueur qui est attaqué
+     */
+    miseAjourInformationsCombatInterface(jClickId, jIndex2) {
+        $(`#${jClickId === 1 ? 2 : 1}`).text(this.action.joueurs[jIndex2].force)
     }
 
     /**
@@ -114,10 +147,9 @@ class FightElement extends HTMLElement{
      * @param {Boolean} handle détermine si on active ou désactive le panel du joueur
      */
     actionPanel(joueurSelector, handle = true){
-        console.log(joueurSelector, handle)
         $(`#${joueurSelector}`).parent().children('button').attr('disabled', handle)
     }
 
 }
-
+//Enregistrement de notre composant personalisé
 customElements.define('jeu-combat', FightElement)
