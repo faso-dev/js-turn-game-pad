@@ -108,7 +108,7 @@ class Plateau {
      * @param {Number} nb_obstacle le nombre d'obstacle à afficher sur le plateau
      * @param {string} obstacle_image le chemin vers l'image de l'obstacle à afficher
      */
-    placerUnObstacle(nb_obstacle = 6, obstacle_image = './assets/images/obstacles/obstacle.png') {
+    placerUnObstacle(nb_obstacle = 6, obstacle_image = './assets/images/obstacles/obstacle.jpg') {
         for (let i = 0; i < nb_obstacle; i++) {
             //On place l'obstacle sur le plateau
             this.placerObstacle(obstacle_image,)

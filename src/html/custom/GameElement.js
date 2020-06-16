@@ -46,7 +46,7 @@ class GameElement extends HTMLElement{
         //Initialisation de la grille
         plateau.init()
         //Placement aléatoire des obstacles
-        plateau.placerUnObstacle()
+        plateau.placerUnObstacle(8, './assets/images/obstacles/obstacle.jpg')
         //Placement aléatoire des armes
         plateau.placerLesArmes()
         //Placement aléatoire des joueurs
