@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./assets/images/logo.png" sizes="90x90" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css">
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"
+          integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/main.css">
 </head>
 <body>
@@ -17,7 +18,8 @@
              alt="Logo du jeux">
         PlatTour
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+            aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
@@ -29,12 +31,18 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link"
-                   href="./index.html">Consigne du jeux
+                <a id="consigne"
+                   class="nav-link"
+                   data-toggle="modal"
+                   data-target="#consigneModal"
+                   href="">Consigne du jeux
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link"
+                   id="about"
+                   data-toggle="modal"
+                   data-target="#aboutModal"
                    href="./index.html">A propos
                 </a>
             </li>
@@ -115,7 +123,8 @@
             </div>
         </div>
     </div>
-
+    <about-modal></about-modal>
+    <consigne-modal></consigne-modal>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
@@ -128,6 +137,8 @@
 <script src="./src/html/custom/VictoireElement.js"></script>
 <script src="./src/html/custom/FightElement.js"></script>
 <script src="./src/html/custom/GameElement.js"></script>
+<script src="./src/html/modals/ConsigneElement.js"></script>
+<script src="./src/html/modals/AProposElement.js"></script>
 <script src="./src/jeux/main.js"></script>
 </body>
 </html>
