@@ -51,3 +51,15 @@
     color: white;
     border-color: green;
 }
+.mt-100{
+    margin-top: 100px;
+}
+
+.nav-link, .text-dark{
+    color: green!important;
+    font-size: 20px;
+    font-weight: 900;
+}
+.nav-link:hover{
+    color: chocolate!important;
+}
